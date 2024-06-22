@@ -20,7 +20,7 @@ const server = createServer(app)
 
 const io = new SocketServer(server, {
   cors: {
-    origin: 'https://spotify-frontend-swart.vercel.app',
+    origin: 'https://spotify-frontend-lj4iiou9t-kbtu.vercel.app',
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
