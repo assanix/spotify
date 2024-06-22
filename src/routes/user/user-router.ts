@@ -8,6 +8,48 @@ const userRouter = express.Router();
 const upload = multer();
 
 
+userRouter.get('/most-popular', async (req, res) => {
+    try {
+        const users = await User.aggregate([
+            {
+                $lookup: {
+                    from: 'songs',
+                    localField: '_id',
+                    foreignField: 'artistId',
+                    as: 'songs'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'playlists',
+                    localField: '_id',
+                    foreignField: 'user',
+                    as: 'playlists'
+                }
+            },
+            {
+                $addFields: {
+                    totalSongLikes: { $sum: { $size: '$songs.likes' } },
+                    totalPlaylistLikes: { $sum: { $size: '$playlists.likes' } }
+                }
+            },
+            {
+                $addFields: {
+                    totalLikes: { $add: ['$totalSongLikes', '$totalPlaylistLikes'] }
+                }
+            },
+            { $sort: { totalLikes: -1 } },
+            { $limit: 10 } // Adjust the limit as needed
+        ]);
+
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error fetching most popular users:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+
 userRouter.get('/favorites', authMiddleware, async (req, res) => {
     try {
         const userId = (req as any).user.id; 

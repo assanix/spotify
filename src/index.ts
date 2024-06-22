@@ -25,7 +25,7 @@ const io = new SocketServer(server, {
     allowedHeaders: ["my-custom-header"],
     credentials: true
   }
-});
+}); 
 
 io.on('connection', (socket) => {
   console.log('New client connected');
