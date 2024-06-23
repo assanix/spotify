@@ -39,7 +39,7 @@ userRouter.get('/most-popular', async (req, res) => {
                 }
             },
             { $sort: { totalLikes: -1 } },
-            { $limit: 10 } // Adjust the limit as needed
+            { $limit: 10 }
         ]);
 
         res.status(200).json(users);

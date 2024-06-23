@@ -32,7 +32,12 @@ io.on('connection', (socket) => {
   
 
   socket.on('updateTrack', (data) => {
-    io.emit('trackUpdated', data);
+    const trackData = {
+      userId: data.userId,
+      track: data.track,
+      artist: data.artist
+    };
+    io.emit('trackUpdated', trackData);
   });
 
   socket.on('disconnect', () => {
